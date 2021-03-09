@@ -12,6 +12,6 @@ namespace AdminPanelAPI.Models
         public string Title { get; set; }
         public string Headline { get; set; }
         public string Body { get; set; }
-        //public int[] ImagesIdsList { get; set; }
+        public HttpFileCollection ImagesList { get; set; }
     }
 }

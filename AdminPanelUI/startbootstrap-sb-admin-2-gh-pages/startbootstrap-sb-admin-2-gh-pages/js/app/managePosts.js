@@ -83,7 +83,6 @@ function fileDialogChanged(event){
         var idxDot = img.name.lastIndexOf(".") + 1;
         var extFile = img.name.substr(idxDot, img.name.length).toLowerCase();
         if (extFile=="jpg" || extFile=="jpeg" || extFile=="png"){
-            selectedImages.push(img);
             var li = document.createElement('li');
             li.appendChild(document.createTextNode(`${img.name}`));
             userSelectedImagesList.appendChild(li);
@@ -103,19 +102,20 @@ function postArticle(e) {
         Title: document.getElementById('title').value,
         Headline: document.getElementById('headline').value,
         Body: document.getElementById('body').value
+        //ImagesList: selectedImages
     };
 
     let formData = new FormData();
-    formData.append("postedArticle", JSON.stringify(postedArticle));
-    formData.append("images", selectedImages);
+    formData.append("postedArticle", postedArticle);
+    //formData.append("images", selectedImages);
 
     fetch(environment.apiURL + '/postarticle', {
         method: 'POST',
         header: {
-            'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data',
+            'Accept': 'application/json, text/plain',
+            'Content-Type': 'application/json, text/plain',
           },
-        body: formData,
+        body: JSON.stringify(postedArticle),
         mode: 'no-cors'
     })
     .then(res => res.json())

@@ -92,7 +92,7 @@ namespace AdminPanelAPI.Controllers
 
         [HttpPost]
         [Route("api/postarticle")]
-        public IHttpActionResult PostArticle([FromBody]PostedArticleModel postedArticle)
+        public IHttpActionResult PostArticle(PostedArticleModel postedArticle)
         {
             if (!ModelState.IsValid)
             {
@@ -124,8 +124,10 @@ namespace AdminPanelAPI.Controllers
 
                     List<ImageModel> articleImages = new List<ImageModel>();
 
-                    HttpFileCollection uploadedImages = HttpContext.Current.Request.Files;
-                    foreach (HttpPostedFile img in uploadedImages)
+                    //HttpFileCollection uploadedImages = HttpContext.Current.Request.Files;
+
+                    foreach(HttpPostedFile img in postedArticle.ImagesList)
+                    //foreach (HttpPostedFile img in uploadedImages)
                     {
                         string imageUniqueName = Guid.NewGuid().ToString().Replace("-", "");
 
