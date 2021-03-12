@@ -7,6 +7,8 @@ using System.Web;
 
 namespace AdminPanelAPI.Models.DataModels
 {
+    //The main representative for images entities
+
     public class ImageModel
     {
         [Key]

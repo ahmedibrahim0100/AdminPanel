@@ -7,6 +7,10 @@ using System.Web;
 
 namespace AdminPanelAPI.Models.DataModels
 {
+    //Correlates the article to the part of website where it should be displayed. For example:-
+    //the article with the Id: 1 (NewsId = 1) is to be displayed at HomePage (which has StructureSectionId: 1)
+    //but now i think there is no need for this class at all 
+
     public class NewsPositionModel
     {
         [Key]

@@ -7,6 +7,8 @@ using System.Web;
 
 namespace AdminPanelAPI.Models.DataModels
 {
+    //The main representative of an article entity
+
     public class NewsIdentityModel
     {
         [Key]

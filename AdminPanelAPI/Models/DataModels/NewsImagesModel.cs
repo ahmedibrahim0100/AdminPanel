@@ -7,7 +7,8 @@ using System.Web;
 
 namespace AdminPanelAPI.Models.DataModels
 {
-    
+    //Represents the relationship between articles and their images
+
     public class NewsImagesModel
     {
         [Key]
