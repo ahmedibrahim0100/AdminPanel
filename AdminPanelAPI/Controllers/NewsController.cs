@@ -92,7 +92,7 @@ namespace AdminPanelAPI.Controllers
 
         [HttpPost]
         [Route("api/postarticle")]
-        public IHttpActionResult PostArticle(PostedArticleModel postedArticle)
+        public IHttpActionResult PostArticle([FromBody]PostedArticleModel postedArticle)
         {
             if (!ModelState.IsValid)
             {
@@ -113,47 +113,29 @@ namespace AdminPanelAPI.Controllers
                     db.NewsIdentities.Add(article);
                     db.SaveChanges();
 
+                    int articleId = db.NewsIdentities.OrderByDescending(x => x.Id).FirstOrDefault().Id;
+
                     NewsContentModel articleContent = new NewsContentModel()
                     {
-                        NewsIdentityId = db.NewsIdentities.Last().Id,
+                        NewsIdentityId = articleId,
                         Headline = postedArticle.Headline,
                         Body = postedArticle.Body
                     };
                     db.NewsContents.Add(articleContent);
                     db.SaveChanges();
 
-                    List<ImageModel> articleImages = new List<ImageModel>();
-
-                    //HttpFileCollection uploadedImages = HttpContext.Current.Request.Files;
-
-                    foreach(HttpPostedFile img in postedArticle.ImagesList)
-                    //foreach (HttpPostedFile img in uploadedImages)
+                    foreach (int imageId in postedArticle.imagesIdsList)
                     {
-                        string imageUniqueName = Guid.NewGuid().ToString().Replace("-", "");
-
-                        var path = Path.Combine(HttpContext.Current.Server.MapPath("~/Uploads/Images"), imageUniqueName);
-                        img.SaveAs(path);
-
-                        ImageModel uploadedImage = new ImageModel()
-                        {
-                            ImageUniqueName = imageUniqueName,
-                            ImageOriginalName = Path.GetFileName(img.FileName)
-                        };
-
-                        db.Images.Add(uploadedImage);
-                        db.SaveChanges();
-
                         NewsImagesModel articleImage = new NewsImagesModel()
                         {
-                            NewsIdentityId = db.NewsIdentities.Last().Id,
-                            ImageId = db.Images.Last().Id
+                            NewsIdentityId = articleId,
+                            ImageId = imageId
                         };
                         db.NewsImages.Add(articleImage);
                         db.SaveChanges();
-
                     }
-                    
 
+                    
                     transaction.Commit();
                 }
                 catch (Exception)

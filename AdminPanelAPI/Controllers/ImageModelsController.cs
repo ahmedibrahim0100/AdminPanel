@@ -88,26 +88,27 @@ namespace AdminPanelAPI.Controllers
         //public IHttpActionResult UploadImage(HttpPostedFileBase img)
         public IHttpActionResult UploadImage()
         {
+            
             HttpFileCollection images = HttpContext.Current.Request.Files;
             List<int> imagesIdsList = new List<int>();
 
-            foreach (HttpPostedFile img in images)
+            for (int i = 0; i < images.Count; i++)
             {
                 string imageUniqueName = Guid.NewGuid().ToString().Replace("-", "");
 
                 var path = Path.Combine(HttpContext.Current.Server.MapPath("~/Uploads/Images"), imageUniqueName);
-                img.SaveAs(path);
+                images[i].SaveAs(path);
 
                 ImageModel uploadedImage = new ImageModel()
                 {
                     ImageUniqueName = imageUniqueName,
-                    ImageOriginalName = Path.GetFileName(img.FileName)
+                    ImageOriginalName = Path.GetFileName(images[i].FileName)
                 };
 
                 db.Images.Add(uploadedImage);
                 db.SaveChanges();
 
-                imagesIdsList.Add(db.Images.Last().Id);
+                imagesIdsList.Add(db.Images.OrderByDescending(img => img.Id).FirstOrDefault().Id);
             }
       
             return Ok(imagesIdsList);
